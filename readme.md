@@ -54,7 +54,7 @@ struct std_msgs__msg__String {
 }
 
 ```
-The result of my decleration and default initialization  leaves the inner `data` pointer with a value of NULL.
+The result of my declaration and default initialization  leaves the inner `data` pointer with a value of NULL.
 
 Thus there is nowhere for the lower level `microros` to store incoming messages. Hence message reception fails
 silently.
@@ -78,14 +78,16 @@ int main() {
 ```
 ## A note on uarts and usb ports
 
-As currently configured the firware will connect with the micro-RoS Agent on the usb port using stdio functions but with CR/LF processing disabled.
+As currently configured the Pico firmware will connect with the micro-RoS Agent on the usb port using stdio functions but with CR/LF processing disabled.
 
-The connection between the firmware and the micro-ROS agent __can__ be configured to operate on `uart0` using stdio function (on pins GPIO16 GPIO17) by a change to
+The connection between the firmware and the micro-ROS agent __can__ be configured to operate on `uart0` using stdio function (on pins `GPIO16` `GPIO17`) by a change to
 the CMakeLists.txt file. See comments in that file.
 
 If you look at the code in uros_main.cpp you will notice there are tracing printouts in the form of `FTRACE(....)` in the code. These are
 implemented in `src/common/trace.cpp` and `src/common/trace.h` and are sent to `uart1` which is exposed on pins `GPIO8` and `GPIO9` and cannot/do not use
 standard stdio functions.
+
+Why the non-standard pins ? A constraint of the hardware layout of the actual project I am working on.
 
 ## The pico firmware 
 
@@ -104,12 +106,12 @@ or cloned from other repos as we work through the build process.
 Get this repo onto your machine:
 
 ```bash
-git clone -b single_publisher git@github.com/robertblackwell/microros-single-publisher.git
+git clone -b master git@github.com/robertblackwell/pico-microros.git
 ```
 
 ## What do we have
 
-The sub directory `pico-single-publsihed` contains a full pico firmware project that includes
+The sub directory `pico-pubsub` contains a full pico firmware project that includes
 the pico based micro ros components. This is build with `cmake` in the usual manner.
 
 ```bash
@@ -132,8 +134,6 @@ Note this is all assume Ubuntu 22.04 as the host.
 We now need to install and run the micro-ROS-Agent. The agent is not part of this repo
 but will be downloaded and built in what follows.
 
-
-
 If you look on the internet you will find that
 we can acquire the agent with a `docker` image or on Ubuntu by using `snapd`. Below is a brief outline of those
 mechanisms and a reference for each.
@@ -147,15 +147,15 @@ This approach will use the contents of the repo [https://github.com/micro-ROS/mi
 
 Before following the instructions in the readme.md of the micro_ros_setup repo make sure you have the following:
 
--   a top level directory called something like `microros-single-publisher-ws`
--   a sub directory called `pico-single-publisher`  which is derived from a clone of `https://github.com/micro_ros_raspberrypi_pico_sdk`
+-   a top level directory called something like `pico-microros`
+-   a sub directory called `pico-pubsub`  which is derived from a clone of `https://github.com/micro_ros_raspberrypi_pico_sdk`
 -   a sub directory called `src` which contains our python ROS2 package `py_subscriber`
 
 This structure is a ROS workspace. 
 
 #### micro-ros-setup package
 
-Make sure $ROS_ID is set, for me it is "iron" and then add the ROS package `micro_ros_setup` to this workspace with the commands 
+Make sure the env variable $ROS_ID is set, for me it is "iron" and then add the ROS package `micro_ros_setup` to this workspace with the commands 
 
 
 ```bash
@@ -170,7 +170,7 @@ source install/local_setup.bash
 #### micro-ROS-Agent package
 
 The commands in the previous section have build the micro-ros-setup package which provides tools that can build 
-a micro-ros agent. 
+a micro-ros agent. Soo now execute
 
  ```bash
 ros2 run micro_ros_setup create_agent_ws.sh
@@ -178,7 +178,7 @@ ros2 run micro_ros_setup build_agent.sh
 source install/local_setup.sh
 
  ```
-These commands will have added a sub directory `./src/uros` which contains the miro ros agent repo.
+These commands will have added a sub directory `./src/uros` which contains the microros agent repo.
 
 All the pieces are in place to mow run the micro ros agent with the command
 

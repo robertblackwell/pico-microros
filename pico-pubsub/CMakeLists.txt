@@ -34,10 +34,16 @@ SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -ffunction-sections -fdata-sections")
 pico_enable_stdio_usb(${TARGET} 1)
 pico_enable_stdio_uart(${TARGET} 0)
 
+# If you want the micro-ROS connection on uart0 change the above 2 lines to:
+# pico_enable_stdio_usb(${TARGET} 0)
+# pico_enable_stdio_uart(${TARGET} 1)
+
 add_compile_definitions(PICO_UART_ENABLE_CRLF_SUPPORT=0)
 add_compile_definitions(PICO_STDIO_ENABLE_CRLF_SUPPORT=0)
 add_compile_definitions(PICO_STDIO_DEFAULT_CRLF=0)
 
+# 
+# These next lines make uart0 work on pins 16 and 17
 target_compile_definitions(${TARGET} PRIVATE
     PICO_DEFAULT_UART_RX_PIN=16
     PICO_DEFAULT_UART_TX_PIN=17
