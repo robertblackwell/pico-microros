@@ -1,0 +1,22 @@
+{
+    "cmake.statusbar.advanced":{
+        "kit":{
+            "visbility":"visible",
+        },
+        "debug":{
+            "visibility":"visible"
+        },
+        "launch":{
+            "visibility":"visible"
+        },
+        "build":{
+            "visibility":"visible"
+        },
+        "buildTarget":{
+            "visibility":"visible"
+        },
+    },
+    "cmake.buildBeforeRun": true,
+    "cortex-debug.openocdPath": "/home/robert/pico/openocd/src",
+    "cmake.generator": "Unix Makefiles"
+}

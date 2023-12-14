@@ -2,6 +2,7 @@ build/
 install/
 log/
 src/micro_ros_setup/
+firmware/
 src/uros/
 __pycache__/
 *.py[cod]

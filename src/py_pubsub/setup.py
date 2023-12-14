@@ -15,12 +15,13 @@ setup(
     zip_safe=True,
     maintainer='robert',
     maintainer_email='rob@whiteacorn.com',
-    description='subscriber for micro ros demo',
+    description='pubisher for micro ros demo',
     license='Apache License 2.0',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'listener = py_subscriber.subscriber_member_function:main',
+            'talker = py_pubsub.publisher_member_function:main',
+            'listener = py_pubsub.subscriber_member_function:main',
         ],
     },
 )

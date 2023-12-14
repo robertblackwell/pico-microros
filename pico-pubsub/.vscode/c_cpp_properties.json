@@ -1,0 +1,34 @@
+{
+    "env": {
+        "userHome": "${userHome}"
+    },
+    "configurations": [
+        {
+            "name": "pico",
+            "intelliSenseMode": "linux-gcc-x64",
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c17",
+            "cppStandard": "gnu++17",
+            "includePath":[
+                /*pico-sdk version.h is generated during the build*/
+                "${workspaceFolder}/",
+                "${workspaceFolder}/src",
+                "${workspaceFolder}/build/generated",
+                "${workspaceFolder}/build/generated/pico_base",
+                "${workspaceFolder}/libmicroros/include",
+                "${env:PICO_SDK_PATH}/src",
+                "${env:PICO_SDK_PATH}/src/rp2_common/pico_platform/include",
+
+                "${env:PICO_SDK_PATH}/src/common/pico_base/include",
+                "${env:PICO_SDK_PATH}/src/boards/**/include",
+                "${env:PICO_SDK_PATH}/src/common/**/include",
+                "${env:PICO_SDK_PATH}/src/host/**/include",
+                "${env:PICO_SDK_PATH}/src/rp2_common/**/include",
+
+                "${env:PICO_SDK_PATH}/src/rp2040/**/include",
+                "${env:PICO_SDK_PATH}/lib/**/include"
+            ]
+        }
+    ],
+    "version": 4
+}

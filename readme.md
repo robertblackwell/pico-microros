@@ -5,8 +5,87 @@ This repo is a demonstration of connecting a RaspberryPi Pico and an Ubuntu host
 To make this connection one needs a firmware app running on the Pico and an instance of
 the micro-ROS-Agent running on the Ubuntu host.
 
-In addition this repo provides a python ROS node that subscribes to the topic being published by the
-Raspberrypi Pico.
+THe Pico firmware in this example contains both a publisher and subscriber.
+
+This repo also provides a python ROS node that subscribes to the topic being published by the
+Raspberrypi Pico and a python ROS node that publishes to the subscriber on the pico.
+
+## Two things that got in the way of this demo
+
+While makeing this demo I ran into a problem where the publisher on the pico worked
+as expected right from the start but the subscriber did not receive any messages.
+This situation persisted for a number of days and all attempts to debug the problem
+failed. 
+
+Eventually I found two things, that when corrected fixed the problem.
+
+### ROS_DOMAIN_ID
+
+The pico version of the micro-ROS code by default sets the Picos ROS_DOMAIN_ID to zero.
+Be carefull to check that there is no mismatch between the pico and your host in regard
+to the value of ROS_DOMAIN_ID. The pico demo code prints out the picos domain_id value.
+
+### std_msgs__msg_String
+
+While setting up the code and variables for the pico's subscriber I decided to
+use `std_msgs__msg__String` as the ros type of the message that the subscriber would receive.
+
+I declared a variable of this type at global scope so that the subscriber callback could
+access it; which actually is unnecessary but in any case thats what I did.
+
+```c
+std_msgs__msg__String sub_msg;
+```
+
+This declaration fails to initialize the variable correctly filling it with zeros. 
+
+For some messages types, say `std_msgs__msg__Int32`, the zero fill works out to be acceptable.
+
+But for `std_msgs__msg__String` it is inadequate as this type contains a pointer.
+Its details are something like:
+
+```c++
+struct std_msgs__msg__String {
+    struct {
+        size_t size;
+        size_t capacity;
+        char *  data;
+    }
+}
+
+```
+The result of my decleration and default initialization  leaves the inner `data` pointer with a value of NULL.
+
+Thus there is nowhere for the lower level `microros` to store incoming messages. Hence message reception fails
+silently.
+
+The solution:
+
+```c
+
+std_msgs__msg__String sub_msg;
+char sub_buffer[512];
+....
+....
+int main() {
+    ....
+    ....
+    sub_buffer[0] = '\0';
+    sub_msg.data.data = &sub_buffer[0];
+    sub_msg.data.capacity = 511;
+    sub_msg.data.size = 0;
+
+```
+## A note on uarts and usb ports
+
+As currently configured the firware will connect with the micro-RoS Agent on the usb port using stdio functions but with CR/LF processing disabled.
+
+The connection between the firmware and the micro-ROS agent __can__ be configured to operate on `uart0` using stdio function (on pins GPIO16 GPIO17) by a change to
+the CMakeLists.txt file. See comments in that file.
+
+If you look at the code in uros_main.cpp you will notice there are tracing printouts in the form of `FTRACE(....)` in the code. These are
+implemented in `src/common/trace.cpp` and `src/common/trace.h` and are sent to `uart1` which is exposed on pins `GPIO8` and `GPIO9` and cannot/do not use
+standard stdio functions.
 
 ## The pico firmware 
 
@@ -122,13 +201,14 @@ output should be:
 
 
 /parameter_events
-__/pico_publisher__
+__/pico_publisher_topic__
+__/pico_subscriber_topic__
 /rosout
 
 No check the pico code is publishing messages:
 
 ```bash
-ros2 topic echo /pico_publisher
+ros2 topic echo /pico_publisher_topic
 ```
 
 should produce something like:

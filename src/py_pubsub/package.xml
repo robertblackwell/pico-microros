@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>py_subscriber</name>
+  <name>py_pubsub</name>
   <version>0.0.0</version>
-  <description>Sample ros2 subscriber reading from microros </description>
+  <description>Sample ros2 publisher for microros demo</description>
   <maintainer email="rob@whiteacorn.com">robert</maintainer>
   <license>Apache License 2.0</license>
 

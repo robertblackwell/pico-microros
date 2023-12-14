@@ -1,0 +1,11 @@
+Next microros tasks:
+    ☐ pubsub node in c++
+    ☐ pubsub node - switch the role of picos usb/uart so that telemetry is on the usb and have this switcable by compile time option
+    ☐ add server to the demo
+
+Git:
+    ☐ make a git repo for this project and leave it at its current state as a demo
+    ☐ make another version of it that becomes the single repo for the entire robot exercise
+
+Robot app:
+    ☐ merge in the robot app code

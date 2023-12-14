@@ -26,7 +26,7 @@ For this experiment we are going to use a demonstration Pico app residing in the
 Its worth noting that this demonstration does not use any custom Ros messages. The use of custom messages
 introduces additional complexities that will be tackled in a future demonstration.
 
-## before we start
+## Before we start
 
 This example will have a number of components and it is worth making a container directory for all these
 components before we start.
