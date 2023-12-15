@@ -239,7 +239,7 @@ docker run -it --rm --net=host microros/micro-ros-agent:iron
 docker run -it --rm -v /dev:/dev --privileged --net=host microros/micro-ros-agent:iron serial --dev /dev/ttyACM0 -b 115200
 ```
 
-see [https://hub.docker.com/r/microros/micro-ros-agent](https://hub.docker.com/r/microros/micro-ros-agent) for more details.
+see [micro-ros-agent repo](https://hub.docker.com/r/microros/micro-ros-agent) for more details.
 
 ### snapd
 
@@ -301,7 +301,7 @@ You can view this output with a terminal program like `minicom` or as I do with 
 
 To see all that is happening you need:
 
--   a terminal in which the microros-Agent is running. It will tell you whether or not the Pico firward and the Agent has connected.
+-   a terminal in which the microros-Agent is running. It will tell you whether or not the Pico firware and the Agent has connected.
 -   a terminal in which to run `ros2 run topic echo /pico_publisher_topic` - this verifies messages are getting from the pico to your host
 -   a terminal in which to run `ros2 run py_pubsub listener` this will repeatadly print "`I heard "nnnn"` demonstrating it is receiving messages from the  publisher on the pico. 
 -   a terminal in which to run `ros2 run py_pubsub listener` this will repeatadly print "`Here we are from python publisher nnn`. Demonstrating that the publisher on the host is activly
@@ -312,8 +312,22 @@ To see all that is happening you need:
     ```
     demonstrating that the pico code subscriber received the message from the hosts publisher.
 
+## pico-pubsub, my changes
 
+I have mentioned a number of times that `pico-pubsub` is derived from the repo at `https://github.com/micro_ros_raspberrypi_pico_sdk`.
 
+But you will notice it has some changes:
+
+-   there is a new sub directory `src` because I am preparing to expand this into a much large project.
+-   the `main` file has been moved into `src` aand its name changed to `uros_main.cpp`
+-   I am writing in `c++` not `C` (at least my version of `c++`)
+-   the original files `pico_uart_transport.h` and `pico_uart_transport.c` have had their names changed to `src/uros_stdio_transport.h` and `src/uros_uart_transport.c`
+    
+    - the move into src is in prep for many more files to be organized.
+    - the change of `uart` to `stdio` is because these files require the use of a `stdio` port as they call `stdio` functions. 
+- The files `uros_nonstdio_uart_transport.*` are an effort to implement the microros communications over a `uart` that is not a `stdio` port. This is so far unsuccessful. There seems to be a race condition.
+- The file `uros_clock_polyfill.c` contains the functions `usleep()` and `clock_gettime()`. The microros libraries expect these function to be provided by the hardware/operating. I separated them from the transport files
+  in anticipation of having multiple transport mechanisms.  
 ## References
 
 The following references are worth reading.
