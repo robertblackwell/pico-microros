@@ -261,9 +261,9 @@ micro-ros-agent serial --dev /dev/ACM0 baud=115200
 
 ## A simple package to monitor the Pico Publisher
 
-Finally lets build our ROS2 python package py_subscriber and monitor the output from the Pico.
+Finally lets build our ROS2 python package `py_pubsub` and monitor the output from the Pico.
 
-From the project roote directory install the dependencies for the python package with"
+From the project root directory install the dependencies for the python package with"
 
 ```bash
 rosdep install -i --from-paths src --rosdistro iron -y
@@ -271,23 +271,53 @@ rosdep install -i --from-paths src --rosdistro iron -y
 Now build the python package:
 
 ```bash
-colcon build --packages-select py_subscriber
+colcon build --packages-select py_pubsub
 ```
 
 Now run that package with:
 
 ```bash
-ros2 run py_subscriber listener
+ros2 run py_pubsub listener
 
 ```
 
-You should see output.
+In a new terminal window run:
 
-see [https://ubuntu.com/blog/getting-started-with-micro-ros-on-raspberry-pi-pico](https://ubuntu.com/blog/getting-started-with-micro-ros-on-raspberry-pi-pico) for more details.
+```bash
+ros2 run py_pubsub talker
+
+```
+
+## Telemetry or Tracing
+
+To fully monitor what is going on we need to view the Telemetry or Trace information comming from the Pico.
+
+As discussed previously this being sent on `uart1` pins GP8 and GP9. To view this you will need to connect
+as USB-TTL-UART cable [like this Adafruit product](https://www.adafruit.com/product/954?gad_source=1&gclid=Cj0KCQiA7OqrBhD9ARIsAK3UXh1ekD7AG44xQJmIs-K5uIkDt3IiY5y8RSQ00CMsuAVyNqOewCKRS74aAh3HEALw_wcB) to pins 8 and 9 and plug the USB end into you host.
+
+You can view this output with a terminal program like `minicom` or as I do with the serial monitor in the Arduino IDE.
+
+## Watch it all
+
+To see all that is happening you need:
+
+-   a terminal in which the microros-Agent is running. It will tell you whether or not the Pico firward and the Agent has connected.
+-   a terminal in which to run `ros2 run topic echo /pico_publisher_topic` - this verifies messages are getting from the pico to your host
+-   a terminal in which to run `ros2 run py_pubsub listener` this will repeatadly print "`I heard "nnnn"` demonstrating it is receiving messages from the  publisher on the pico. 
+-   a terminal in which to run `ros2 run py_pubsub listener` this will repeatadly print "`Here we are from python publisher nnn`. Demonstrating that the publisher on the host is activly
+    sending messages to the subscriber on the Pico.
+-   and finally, in another terminal run `minicom` or the Arduino IDE Serial Monitor and see a string of messages like:
+    ```bash
+    TRACE uros_main.cpp[80]:[subscriber_callback] subscriber callback Not NULL Here we are from python publisher nnn
+    ```
+    demonstrating that the pico code subscriber received the message from the hosts publisher.
+
+
 
 ## References
 
 The following references are worth reading.
+see [https://ubuntu.com/blog/getting-started-with-micro-ros-on-raspberry-pi-pico](https://ubuntu.com/blog/getting-started-with-micro-ros-on-raspberry-pi-pico) for more details.
 
 [https://robofoundry.medium.com/raspberry-pi-pico-ros2-via-micro-ros-actually-working-in-1-hr-9f7a3782d3e3](https://robofoundry.medium.com/raspberry-pi-pico-ros2-via-micro-ros-actually-working-in-1-hr-9f7a3782d3e3)
 
