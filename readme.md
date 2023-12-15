@@ -50,7 +50,7 @@ struct std_msgs__msg__String {
         size_t size;
         size_t capacity;
         char *  data;
-    }
+    } data;
 }
 
 ```
@@ -78,12 +78,12 @@ int main() {
 ```
 ## A note on uarts and usb ports
 
-As currently configured the Pico firmware will connect with the micro-RoS Agent on the usb port using stdio functions but with CR/LF processing disabled.
+As currently configured the Pico firmware will connect with the micro-RoS Agent on the pico's usb port using stdio functions but with CR/LF processing disabled.
 
 The connection between the firmware and the micro-ROS agent __can__ be configured to operate on `uart0` using stdio function (on pins `GPIO16` `GPIO17`) by a change to
 the CMakeLists.txt file. See comments in that file.
 
-If you look at the code in uros_main.cpp you will notice there are tracing printouts in the form of `FTRACE(....)` in the code. These are
+If you look at the code in `uros_main.cpp` you will notice there are tracing printouts in the form of `FTRACE(....)` in the code. These are
 implemented in `src/common/trace.cpp` and `src/common/trace.h` and are sent to `uart1` which is exposed on pins `GPIO8` and `GPIO9` and cannot/do not use
 standard stdio functions.
 
@@ -135,7 +135,7 @@ We now need to install and run the micro-ROS-Agent. The agent is not part of thi
 but will be downloaded and built in what follows.
 
 If you look on the internet you will find that
-we can acquire the agent with a `docker` image or on Ubuntu by using `snapd`. Below is a brief outline of those
+we can acquire the agent with a `docker` image or on Ubuntu by using `snapd`. Father below is a brief outline of those
 mechanisms and a reference for each.
 
 However for this demonstration we are going to setup and run the agent without either of those tools
@@ -149,7 +149,7 @@ Before following the instructions in the readme.md of the micro_ros_setup repo m
 
 -   a top level directory called something like `pico-microros`
 -   a sub directory called `pico-pubsub`  which is derived from a clone of `https://github.com/micro_ros_raspberrypi_pico_sdk`
--   a sub directory called `src` which contains our python ROS2 package `py_subscriber`
+-   a sub directory called `src` which contains our python ROS2 package `py_pubsub`
 
 This structure is a ROS workspace. 
 
@@ -170,7 +170,7 @@ source install/local_setup.bash
 #### micro-ROS-Agent package
 
 The commands in the previous section have build the micro-ros-setup package which provides tools that can build 
-a micro-ros agent. Soo now execute
+a micro-ros agent. So now execute
 
  ```bash
 ros2 run micro_ros_setup create_agent_ws.sh
@@ -180,7 +180,7 @@ source install/local_setup.sh
  ```
 These commands will have added a sub directory `./src/uros` which contains the microros agent repo.
 
-All the pieces are in place to mow run the micro ros agent with the command
+All the pieces are in place to now run the micro ros agent with the command
 
  ```bash
  ros2 run micro_ros_agent micro_ros_agent serial --dev /dev/ttyACM0 baudrate=115200
@@ -192,6 +192,9 @@ With the agent running on a host, the micro-ros-example firmware loaded onto the
 that its all working.
 
 First check - the code on the pico has registered as a publisher:
+
+The first step is to view the output from the microRos agent. You should be able to see where
+it has created 2 topics a subscriber and a publisher. Next issue the command: 
 
 ```bash
 ros2 topic list
