@@ -1,5 +1,5 @@
-#ifndef H_utils_h
-#define H_utils_h
+#ifndef H_trace_h
+#define H_trace_h
 #include <stdio.h>
 #include <pico/stdlib.h>
 #include <stdint.h>

@@ -1,7 +1,7 @@
 import rclpy
 import time
 import threading
-from rclpy.node import Node, GuardCondition
+from rclpy.node import Node
 
 from std_msgs.msg import String, Int32
 

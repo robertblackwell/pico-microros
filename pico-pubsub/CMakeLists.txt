@@ -15,16 +15,43 @@ add_executable(${TARGET}
     src/uros_stdio_transport.c
     src/uros_nonstdio_uart_transport.h
     src/uros_nonstdio_uart_transport.c
-    src/common/trace.cpp
+    src/common/argv.h
+    src/common/argv.cpp
+    src/common/commands.h
+    src/common/commands.cpp
+    src/common/config.h
+    src/common/dri0002.h
+    src/common/dri0002.cpp
+    src/common/encoder.h
+    src/common/encoder.cpp
+    src/common/enum.h
+    src/common/enum.cpp
+    src/common/motion.h
+    src/common/motion.cpp
+    src/common/pico_gpio_irq_dispatcher.h
+    src/common/pico_gpio_irq_dispatcher.cpp
+    src/common/pid.h
+    src/common/pid.cpp
+    src/common/robot.h
+    src/common/robot.cpp
+    src/common/reporter.h
+    src/common/reporter.cpp
+    src/common/task.h
+    src/common/task.cpp
     src/common/trace.h
+    src/common/trace.cpp
+    src/common/transport.h
+    src/common/transport.cpp
 )
-
 target_link_libraries(${TARGET}
     pico_stdlib
     microros
+    hardware_gpio 
+    hardware_pwm
 )
 
 target_include_directories(${TARGET} PUBLIC
+    src
     libmicroros/include
 )
 
