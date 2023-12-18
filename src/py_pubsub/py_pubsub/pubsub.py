@@ -1,6 +1,7 @@
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
+from std_msgs.msg import Int32
 
 
 class PubSubNode(Node):
@@ -8,11 +9,11 @@ class PubSubNode(Node):
     def __init__(self):
         super().__init__('pubsub_node')
 
-        self.publisher_ = self.create_publisher(String, 'pico_subscriber', 10)
+        self.publisher_ = self.create_publisher(String, 'pico_subscriber_topic', 10)
 
         self.subscription = self.create_subscription(
-            String,
-            'pico_publisher',
+            Int32,
+            'pico_publisher_topic',
             self.listener_callback,
             10)
 

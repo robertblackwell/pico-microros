@@ -83,6 +83,22 @@ void subscriber_callback(const void* msgin)
     }
 
 }
+bool pingAgent(){
+    // Wait for agent successful ping for 2 minutes.
+    const int timeout_ms = 100;
+    const uint8_t attempts = 1;
+
+    rcl_ret_t ret = rmw_uros_ping_agent(timeout_ms, attempts);
+
+    if (ret != RCL_RET_OK){
+    	// gpio_put(LED_PIN, 0);
+    	return false;
+    } else {
+    	// gpio_put(LED_PIN, 1);
+        return true;
+    }
+}
+
 int main()
 {
 
@@ -122,6 +138,11 @@ int main()
 
     sleep_ms(5000);
     FTRACE("Starting main\n","");
+    // This trick is thanks to Jon Durrant (youtube)[https://www.youtube.com/watch?v=IPxyBB2nrXE] and (github)[https://github.com/jondurrant/RPIPicoMicroRosServoExp]
+    while(!pingAgent()) {
+        sleep_ms(1000);
+        FTRACE("waiting for agent\n","");
+    }
     gpio_init(LED_PIN);
     gpio_set_dir(LED_PIN, GPIO_OUT);
 

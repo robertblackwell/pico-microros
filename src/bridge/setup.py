@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-package_name = 'py_pubsub'
+package_name = 'bridge'
 
 setup(
     name=package_name,
@@ -15,15 +15,11 @@ setup(
     zip_safe=True,
     maintainer='robert',
     maintainer_email='rob@whiteacorn.com',
-    description='pubisher for micro ros demo',
-    license='Apache License 2.0',
+    description='TODO: Package description',
+    license='TODO: License declaration',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'talker = py_pubsub.publisher_member_function:main',
-            'listener = py_pubsub.subscriber_member_function:main',
-            'pubsub = py_pubsub.pubsub:main', 
-            'twist2rpm = py_pubsub.twist2rpm:main', 
         ],
     },
 )

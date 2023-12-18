@@ -312,6 +312,28 @@ To see all that is happening you need:
     ```
     demonstrating that the pico code subscriber received the message from the hosts publisher.
 
+## Watch it all - a little bit easier
+
+The previous section is a bit tedious and error prone. I experimented with Launch files but they did not seem to help.
+
+So I have added the following files to the repo which will help a little. Note `terminator` is a terminal multiplexor available on Ubuntu and many other platforms.
+
+-   `terminator-config` - which has a 4 panel layout defined. If you make this your default `terminator` config file at `~/.config/terminator/config` and then run
+  
+    ```bash 
+    terminator -s
+    ```
+    and select  the option `Split4` from the pop-up menu. A 4 panel screen will open.
+
+-   then execute the following shell scripts, one in each panel in the following order:
+
+    -   ```./run_uros_agent.sh```
+    -   `./run_listener.sh`
+    -   `./run_talker.sh`
+    -   `./run_telemetry.sh`
+
+This will have the same outcome as the provious section but with a bit less hassle.
+
 ## pico-pubsub, my changes
 
 I have mentioned a number of times that `pico-pubsub` is derived from the repo at `https://github.com/micro_ros_raspberrypi_pico_sdk`.
@@ -324,11 +346,41 @@ But you will notice it has some changes:
 -   the original files `pico_uart_transport.h` and `pico_uart_transport.c` have had their names changed to `src/uros_stdio_transport.h` and `src/uros_uart_transport.c`
     
     - the move into src is in prep for many more files to be organized.
-    - the change of `uart` to `stdio` is because these files require the use of a `stdio` port as they call `stdio` functions. 
+    - the change of `uart` to `stdio` is because these files require the use of a `stdio` port as they call `stdio` functions. The original `uart` qualifier is a misdirection.
 - The files `uros_nonstdio_uart_transport.*` are an effort to implement the microros communications over a `uart` that is not a `stdio` port. This is so far unsuccessful. There seems to be a race condition.
 - The file `uros_clock_polyfill.c` contains the functions `usleep()` and `clock_gettime()`. The microros libraries expect these function to be provided by the hardware/operating. I separated them from the transport files
   in anticipation of having multiple transport mechanisms.  
+
+
+
 ## References
+Teleop
+https://github.com/ros2/teleop_twist_joy
+https://github.com/ros2/teleop_twist_keyboard
+
+alternative serial implementation
+https://github.com/osrf/ros2_serial_example/tree/master
+
+https://github.com/AnrdyShmrdy/ros2_serial_interface/tree/main
+
+https://github.com/ROBOTIS-GIT/ros2arduino
+
+https://github.com/ros-drivers/transport_drivers/tree/main
+
+https://github.com/RoverRobotics-forks/serial-ros2
+
+https://github.com/RoverRobotics-forks/serial-ros2
+
+http://wiki.ros.org/rosserial
+https://github.com/juancamilog/rosserial-mrl/tree/master
+
+https://github.com/osrf/ros2_serial_example
+https://en.wikipedia.org/wiki/Consistent_Overhead_Byte_Stuffing
+https://en.wikipedia.org/wiki/Consistent_Overhead_Byte_Stuffing
+https://github.com/cmcqueen/cobs-c
+
+Mixing rclpy with asyncio
+https://robotics.stackexchange.com/questions/24304/how-to-bridge-rclpy-with-pythons-asyncio
 
 The following references are worth reading.
 see [https://ubuntu.com/blog/getting-started-with-micro-ros-on-raspberry-pi-pico](https://ubuntu.com/blog/getting-started-with-micro-ros-on-raspberry-pi-pico) for more details.
